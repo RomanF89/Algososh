@@ -1,0 +1,89 @@
+.change_list_area {
+    display: flex;
+    flex-direction: row;
+    padding: 0 0 38px 0;
+    justify-content: center;
+}
+
+.change_input {
+    width: 204px;
+    height: 60px;
+    margin: 0 12px 0 0;
+}
+
+.add_head_button {
+    margin: 0 12px 0 0;
+    width: 175px;
+    height: 60px;
+}
+
+.delete_head_button {
+    margin: 0 12px 0 0;
+    width: 175px;
+    height: 60px;
+}
+
+.add_tail_button {
+    margin: 0 12px 0 0;
+    width: 175px;
+    height: 60px;
+}
+
+.delete_tail_button {
+    width: 175px;
+    height: 60px;
+}
+
+.change_index_area {
+    display: flex;
+    flex-direction: row;
+    margin: 0 0 90px 0;
+    justify-content: center;
+}
+
+.change_index_input {
+    width: 204px;
+    height: 60px;
+    margin: 0 12px 0 0;
+}
+
+.add_index_button {
+    width: 362px;
+    height: 60px;
+    margin: 0 12px 0 0;
+}
+
+.delete_index_button {
+    width: 362px;
+    height: 60px;
+}
+
+.list_area {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.list_item_area {
+    display: flex;
+    flex-direction: column;
+}
+
+.list_item {
+    margin: 30px 16px 0 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.item_small_top {
+    margin: -70px 0 0 10px;
+    position: fixed;
+    z-index: 99;
+    background-color: white;
+}
+
+.item_small_bottom {
+    margin: 39px 0 0 10px;
+    background-color: white;
+}
