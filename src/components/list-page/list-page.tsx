@@ -1,4 +1,5 @@
-import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+import { useForm } from "../../hooks/useForm";
 import { ElementStates } from "../../types/element-states";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
@@ -8,23 +9,25 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from './list-page.module.css';
 import { LinkedList, TСircleChange } from "./utils";
 
+interface IForm {
+  values : {
+    inputList?: string,
+    indexInput?: string,
+  }
+  handleChange: (event: any) => void,
+  setValues: Dispatch<SetStateAction<{}>>,
+}
 
 export const ListPage: React.FC = () => {
   const [array, setArray] = useState<string[]>([]);
-  const [inputState, setInputState] = useState<string>('');
-  const [indexInputState, setIndexInputState] = useState<string>('');
   const [circleToChange, setCircleToChange] = useState<TСircleChange>({ num: null, index: null, operation: undefined });
   const [greenIndex, setGreenIndex] = useState<number>();
   const [changingIndex, setChangingIndex] = useState<number>();
   const [loadingbutton, setLoadingButton] = useState('');
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+  const [isIndexSubmitDisabled, setIsIndexSubmitDisabled] = useState(true);
+  const {values, handleChange, setValues}: IForm  = useForm({inputList: '', indexInput: ''});
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputState(e.target.value);
-  }
-
-  const handleIndexChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setIndexInputState(e.target.value);
-  }
 
   const list = useMemo(() => new LinkedList<string>(), []);
   useEffect(() => {
@@ -37,18 +40,18 @@ export const ListPage: React.FC = () => {
 
 
   const addToHead = () => {
-    if (inputState === '' || inputState.startsWith(' ')) {
+    if (values.inputList === '' || values.inputList!.startsWith(' ')) {
       console.log('Введите корректное значение');
       return
     }
     setLoadingButton('addToHeadButton');
-    setInputState('');
-    setCircleToChange({ num: +inputState, index: 0, operation: 'add' });
+    setValues((prevState) => ({...prevState, inputList: ''}));
+    values.indexInput && setCircleToChange({ num: +values.indexInput, index: 0, operation: 'add' });
     setTimeout(() => {
       if (array.length === 0) {
-        list.append(inputState);
+        values.inputList && list.append(values.inputList);
       } else {
-        list.insertAt(inputState, 0);
+        values.inputList && list.insertAt(values.inputList, 0);
       }
       setArray(list.print());
       setCircleToChange({ num: null, index: null });
@@ -61,15 +64,15 @@ export const ListPage: React.FC = () => {
   }
 
   const addToTail = () => {
-    if (inputState === '' || inputState.startsWith(' ')) {
+    if ( values.inputList === '' || values.inputList && values.inputList.startsWith(' ')) {
       console.log('Введите корректное значение');
       return
     }
     setLoadingButton('addToTailButton');
-    setInputState('');
-    setCircleToChange({ num: +inputState, index: array.length - 1, operation: 'add' });
+    setValues((prevState) => ({...prevState, inputList: ''}));
+    values.inputList && setCircleToChange({ num: +values.inputList, index: array.length - 1, operation: 'add' });
     setTimeout(() => {
-      list.append(inputState)
+      values.inputList && list.append(values.inputList)
       setArray(list.print());
       setCircleToChange({ num: null, index: null });
       setGreenIndex(array.length);
@@ -107,78 +110,95 @@ export const ListPage: React.FC = () => {
   }
 
   const handleAddFromIndex = () => {
-    if (inputState === '' || inputState.startsWith(' ')) {
+    if (values.inputList === '' || values.inputList && values.inputList.startsWith(' ')) {
       console.log('Введите корректное значение');
       return
     }
-    if (!+indexInputState || +indexInputState > array.length) {
+    if ( values.indexInput && !+values.indexInput || values.indexInput && +values.indexInput  > array.length) {
       console.log('Введите корректное значение индекса');
       return
     }
     setLoadingButton('addFromIndexButton');
-    setInputState('');
-    setIndexInputState('');
-    for (let i = 0; i < +indexInputState + 1; i++) {
-      setTimeout(() => {
-        setCircleToChange({ num: +inputState, index: i, operation: 'add' });
-      }, (i) * 800)
-      setTimeout(() => {
-        setChangingIndex(i);
-      }, (i + 1) * 800)
+    setValues({inputList: '' ,indexInput: ''});
+    if (values.indexInput) {
+      for (let i = 0; i < +values.indexInput + 1; i++) {
+        setTimeout(() => {
+          values.inputList && setCircleToChange({ num: +values.inputList, index: i, operation: 'add' });
+        }, (i) * 800)
+        setTimeout(() => {
+          setChangingIndex(i);
+        }, (i + 1) * 800)
+      }
     }
-    setTimeout(() => {
-      list.insertAt(inputState, +indexInputState);
-      setArray(list.print());
-      setChangingIndex(undefined);
-      setCircleToChange({ num: null, index: null });
-      setGreenIndex(+indexInputState);
-    }, (+indexInputState + 1) * 800)
-
-    setTimeout(() => {
-      setGreenIndex(undefined);
-      setLoadingButton('');
-    }, (+indexInputState + 1) * 1300)
+    if (values.indexInput) {
+      setTimeout(() => {
+        values.inputList && values.indexInput && list.insertAt(values.inputList, +values.indexInput);
+        setArray(list.print());
+        setChangingIndex(undefined);
+        setCircleToChange({ num: null, index: null });
+        values.indexInput && setGreenIndex(+values.indexInput);
+      }, (+values.indexInput + 1) * 800)
+      setTimeout(() => {
+        setGreenIndex(undefined);
+        setLoadingButton('');
+      }, (+values.indexInput + 1) * 1300)
+    }
   }
 
   const handleDeleteFromIndex = () => {
-    if (!+indexInputState || +indexInputState > array.length - 1) {
+    if ( values.indexInput && !+values.indexInput || values.indexInput && +values.indexInput > array.length - 1) {
       console.log('Введите корректное значение индекса')
       return
     }
-    setInputState('');
-    setIndexInputState('');
+    setValues({inputList: '' ,indexInput: ''});
     setLoadingButton('deleteFromIndexButton');
-    for (let i = 0; i < +indexInputState + 1; i++) {
+    if (values.indexInput) {
+      for (let i = 0; i < +values.indexInput + 1; i++) {
+        setTimeout(() => {
+          setChangingIndex(i);
+        }, (i + 1) * 800)
+      }
+      setValues((prevState) => ({...prevState, indexInput: ''}));
       setTimeout(() => {
-        setChangingIndex(i);
-      }, (i + 1) * 800)
+        values.indexInput && setCircleToChange({ num: +array[+values.indexInput], index: +values.indexInput, operation: 'delete' });
+      }, (+values.indexInput + 2) * 800)
+      setTimeout(() => {
+        values.indexInput && list.deleteIndex(+values.indexInput);
+        setArray(list.print());
+        setChangingIndex(undefined);
+        setCircleToChange({ num: null, index: null });
+        setLoadingButton('');
+      }, (+values.indexInput + 3) * 800)
     }
-    setIndexInputState('');
-    setTimeout(() => {
-      setCircleToChange({ num: +array[+indexInputState], index: +indexInputState, operation: 'delete' });
-    }, (+indexInputState + 2) * 800)
-    setTimeout(() => {
-      list.deleteIndex(+indexInputState);
-      setArray(list.print());
-      setChangingIndex(undefined);
-      setCircleToChange({ num: null, index: null });
-      setLoadingButton('');
-    }, (+indexInputState + 3) * 800)
+
   }
+
+  useEffect(() => {
+      if (values.inputList !== '' && values.inputList!.length <= 4) {
+        setIsSubmitDisabled(false);
+      } else {
+        setIsSubmitDisabled(true);
+      }
+      if ( values.indexInput && values.inputList !== '' && values.indexInput !== '' && +values.indexInput <= array.length - 1 && +values.indexInput >= 0) {
+        setIsIndexSubmitDisabled(false);
+      } else {
+        setIsIndexSubmitDisabled(true);
+      }
+  }, [values.indexInput, values.inputList])
 
   return (
     <SolutionLayout title="Связный список">
       <div className={styles.change_list_area}>
-        <Input disabled={Boolean(loadingbutton)} placeholder={'Введите значение'} onChange={handleChange} maxLength={4} type={"text"} isLimitText={true} extraClass={styles.change_input} value={inputState}></Input>
-        <Button isLoader={loadingbutton === 'addToHeadButton'} disabled={Boolean(loadingbutton)}  text={'Добавить в head'} onClick={addToHead} extraClass={styles.add_head_button}></Button>
-        <Button isLoader={loadingbutton === 'addToTailButton'} disabled={Boolean(loadingbutton)}  text={'Добавить в tail'} onClick={addToTail} extraClass={styles.add_tail_button}></Button>
-        <Button isLoader={loadingbutton === 'deleteFromHeadButton'} disabled={Boolean(loadingbutton)}  text={'Удалить из head'} onClick={deleteHead} extraClass={styles.delete_head_button}></Button>
-        <Button isLoader={loadingbutton === 'deleteFromTailButton'} disabled={Boolean(loadingbutton)}  text={'Удалить из tail'} onClick={deleteTail} extraClass={styles.delete_tail_button}></Button>
+        <Input disabled={Boolean(loadingbutton)} placeholder={'Введите значение'} onChange={handleChange} maxLength={4} type={"text"} isLimitText={true} extraClass={styles.change_input} name={'inputList'} value={values.inputList}></Input>
+        <Button isLoader={loadingbutton === 'addToHeadButton'} disabled={isSubmitDisabled || Boolean(loadingbutton)} text={'Добавить в head'} onClick={addToHead} extraClass={styles.add_head_button}></Button>
+        <Button isLoader={loadingbutton === 'addToTailButton'} disabled={isSubmitDisabled || Boolean(loadingbutton)} text={'Добавить в tail'} onClick={addToTail} extraClass={styles.add_tail_button}></Button>
+        <Button isLoader={loadingbutton === 'deleteFromHeadButton'} disabled={Boolean(loadingbutton)} text={'Удалить из head'} onClick={deleteHead} extraClass={styles.delete_head_button}></Button>
+        <Button isLoader={loadingbutton === 'deleteFromTailButton'} disabled={Boolean(loadingbutton)} text={'Удалить из tail'} onClick={deleteTail} extraClass={styles.delete_tail_button}></Button>
       </div>
       <div className={styles.change_index_area}>
-        <Input disabled={Boolean(loadingbutton)}  placeholder={'Введите индекс'} onChange={handleIndexChange} maxLength={4} type={"number"} extraClass={styles.change_index_input} value={indexInputState}></Input>
-        <Button isLoader={loadingbutton === 'addFromIndexButton'}  disabled={Boolean(loadingbutton)}  text={'Добавить по индексу'} onClick={handleAddFromIndex} extraClass={styles.add_index_button}></Button>
-        <Button isLoader={loadingbutton === 'deleteFromIndexButton'}  disabled={Boolean(loadingbutton)}  text={'Удалить по индексу'} onClick={handleDeleteFromIndex} extraClass={styles.delete_index_button}></Button>
+        <Input disabled={Boolean(loadingbutton)} placeholder={'Введите индекс'} onChange={handleChange} min={0} max={array.length - 1} maxLength={4} isLimitText={true} type={"number"} extraClass={styles.change_index_input} name={'indexInput'} value={values.indexInput}></Input>
+        <Button isLoader={loadingbutton === 'addFromIndexButton'} disabled={isIndexSubmitDisabled || Boolean(loadingbutton)} text={'Добавить по индексу'} onClick={handleAddFromIndex} extraClass={styles.add_index_button}></Button>
+        <Button isLoader={loadingbutton === 'deleteFromIndexButton'} disabled={isIndexSubmitDisabled || Boolean(loadingbutton)} text={'Удалить по индексу'} onClick={handleDeleteFromIndex} extraClass={styles.delete_index_button}></Button>
       </div>
       <div className={styles.list_area}>
         {array && array.map((item, index) =>

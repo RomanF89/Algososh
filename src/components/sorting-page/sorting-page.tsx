@@ -39,6 +39,7 @@ export const SortingPage: React.FC = () => {
 
   const renderSelectionArr = (method?: string) => {
     if (!startArray.length) return;
+    if (!sortMethod) return;
     const renderArr = method === "reverse" ? reverseSortArr : sortArr;
     setGreen([]);
     setLoadingButton( method === "reverse" ? "onDecreaseButton" : "onIncreaseButton" );
@@ -72,6 +73,7 @@ export const SortingPage: React.FC = () => {
 
   const RenderBubbleArr = () => {
     if (!startArray.length) return;
+    if (!sortMethod) return;
     setGreen([]);
     setLoadingButton("onIncreaseButton");
     let red: number;
@@ -104,6 +106,7 @@ export const SortingPage: React.FC = () => {
 
   const RenderBubbleReverseArr = () => {
     if (!startArray.length) return;
+    if (!sortMethod) return;
     setGreen([]);
     setLoadingButton("onDecreaseButton");
     let red: number;
@@ -140,6 +143,10 @@ export const SortingPage: React.FC = () => {
       setReverseSortArr(selectionSort(startArray).reverseSelectionArrays);
     }
   }, [sortMethod, startArray]);
+
+  useEffect(() => {
+    randomArr();
+  },[])
 
   return (
     <SolutionLayout title="Сортировка массива">

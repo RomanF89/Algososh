@@ -1,31 +1,36 @@
-import React, { ChangeEvent, useState } from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import styles from "./string.module.css";
 import { Button } from "../ui/button/button";
 import { reverseArr } from "./utils";
+import { useForm } from "../../hooks/useForm";
 
+interface IForm {
+  values : {
+    inputString?: string,
+  }
+  handleChange: (event: any) => void,
+  setValues: Dispatch<SetStateAction<{}>>,
+}
 
 
 export const StringComponent: React.FC = () => {
-  const [inputState, setInputState] = useState('');
   const [array, setArr] = useState<string[][]>([]);
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputState(e.target.value);
-  }
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+  const {values, handleChange, setValues}: IForm  = useForm({inputString: ''});
 
   const createArr = () => {
     const arr: string[][] = []
-    for (let i = 0; i < inputState.length; i++) {
-      arr[i] = [inputState[i]]
+    for (let i = 0; i < values.inputString!.length; i++) {
+      arr[i] = [values.inputString![i]]
     }
     return arr;
   }
 
   const handleClick = () => {
-    if (inputState === '') {
+    if (values.inputString === '') {
       return
     }
     const arr = createArr();
@@ -35,7 +40,7 @@ export const StringComponent: React.FC = () => {
   }
 
   const RenderArr = (arr: string[][]) => {
-    setInputState('');
+    setValues({inputString : ''});
     setIsLoading(true);
     const green = 'green';
     const red = 'red';
@@ -88,14 +93,23 @@ export const StringComponent: React.FC = () => {
     }, 1000)
   }
 
+  useEffect(() => {
+    if ( values.inputString && values.inputString !== '' && values.inputString!.length <= 11) {
+      setIsSubmitDisabled(false);
+    } else {
+      setIsSubmitDisabled(true);
+    }
+  }, [values.inputString])
+
+
   return (
     <SolutionLayout title="Строка">
-      <div className={styles.string_content}>
+      <form className={styles.string_content}>
         <div className={styles.input_area}>
-          <Input disabled={isLoading} onChange={handleChange} extraClass={'input_string'} isLimitText={true} maxLength={11} value={inputState}></Input>
+          <Input disabled={isLoading} onChange={handleChange} name={'inputString'} extraClass={'input_string'} isLimitText={true} maxLength={11} value={values.inputString}></Input>
         </div>
-        <Button isLoader={isLoading} onClick={handleClick} text="Развернуть"></Button>
-      </div>
+        <Button disabled={isSubmitDisabled} isLoader={isLoading} onClick={handleClick} text="Развернуть"></Button>
+      </form>
       <div className={styles.reverse_area}>
         <div className={styles.string_items}>
           {array.map((item, index) =>
