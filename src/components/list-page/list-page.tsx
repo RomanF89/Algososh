@@ -26,6 +26,7 @@ export const ListPage: React.FC = () => {
   const [loadingbutton, setLoadingButton] = useState('');
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [isIndexSubmitDisabled, setIsIndexSubmitDisabled] = useState(true);
+  const [isIndexDeleteDisabled, setIsIndexDeleteDisabled] = useState(true);
   const {values, handleChange, setValues}: IForm  = useForm({inputList: '', indexInput: ''});
 
 
@@ -70,7 +71,7 @@ export const ListPage: React.FC = () => {
     }
     setLoadingButton('addToTailButton');
     setValues((prevState) => ({...prevState, inputList: ''}));
-    values.inputList && setCircleToChange({ num: +values.inputList, index: array.length - 1, operation: 'add' });
+    values.inputList && setCircleToChange({ num: values.inputList, index: array.length - 1, operation: 'add' });
     setTimeout(() => {
       values.inputList && list.append(values.inputList)
       setArray(list.print());
@@ -85,7 +86,7 @@ export const ListPage: React.FC = () => {
 
   const deleteHead = () => {
     setLoadingButton('deleteFromHeadButton');
-    setCircleToChange({ num: +array[0], index: 0, operation: 'delete' });
+    setCircleToChange({ num: array[0], index: 0, operation: 'delete' });
     setTimeout(() => {
       list.deleteHead();
       setArray(list.print());
@@ -96,7 +97,7 @@ export const ListPage: React.FC = () => {
 
   const deleteTail = () => {
     setLoadingButton('deleteFromTailButton');
-    setCircleToChange({ num: +array[array.length - 1], index: array.length - 1, operation: 'delete' });
+    setCircleToChange({ num: array[array.length - 1], index: array.length - 1, operation: 'delete' });
     setTimeout(() => {
       if (array.length === 1) {
         list.deleteHead();
@@ -123,7 +124,7 @@ export const ListPage: React.FC = () => {
     if (values.indexInput) {
       for (let i = 0; i < +values.indexInput + 1; i++) {
         setTimeout(() => {
-          values.inputList && setCircleToChange({ num: +values.inputList, index: i, operation: 'add' });
+          values.inputList && setCircleToChange({ num: values.inputList, index: i, operation: 'add' });
         }, (i) * 800)
         setTimeout(() => {
           setChangingIndex(i);
@@ -160,7 +161,7 @@ export const ListPage: React.FC = () => {
       }
       setValues((prevState) => ({...prevState, indexInput: ''}));
       setTimeout(() => {
-        values.indexInput && setCircleToChange({ num: +array[+values.indexInput], index: +values.indexInput, operation: 'delete' });
+        values.indexInput && setCircleToChange({ num: array[+values.indexInput], index: +values.indexInput, operation: 'delete' });
       }, (+values.indexInput + 2) * 800)
       setTimeout(() => {
         values.indexInput && list.deleteIndex(+values.indexInput);
@@ -184,22 +185,27 @@ export const ListPage: React.FC = () => {
       } else {
         setIsIndexSubmitDisabled(true);
       }
+      if ( values.indexInput && values.indexInput !== '' && +values.indexInput <= array.length - 1 && +values.indexInput >= 0) {
+        setIsIndexDeleteDisabled(false);
+      } else {
+        setIsIndexDeleteDisabled(true);
+      }
   }, [values.indexInput, values.inputList])
 
   return (
     <SolutionLayout title="Связный список">
-      <div className={styles.change_list_area}>
+      <form onSubmit={(e) => e.preventDefault()} className={styles.change_list_area}>
         <Input disabled={Boolean(loadingbutton)} placeholder={'Введите значение'} onChange={handleChange} maxLength={4} type={"text"} isLimitText={true} extraClass={styles.change_input} name={'inputList'} value={values.inputList}></Input>
         <Button isLoader={loadingbutton === 'addToHeadButton'} disabled={isSubmitDisabled || Boolean(loadingbutton)} text={'Добавить в head'} onClick={addToHead} extraClass={styles.add_head_button}></Button>
         <Button isLoader={loadingbutton === 'addToTailButton'} disabled={isSubmitDisabled || Boolean(loadingbutton)} text={'Добавить в tail'} onClick={addToTail} extraClass={styles.add_tail_button}></Button>
         <Button isLoader={loadingbutton === 'deleteFromHeadButton'} disabled={Boolean(loadingbutton)} text={'Удалить из head'} onClick={deleteHead} extraClass={styles.delete_head_button}></Button>
         <Button isLoader={loadingbutton === 'deleteFromTailButton'} disabled={Boolean(loadingbutton)} text={'Удалить из tail'} onClick={deleteTail} extraClass={styles.delete_tail_button}></Button>
-      </div>
-      <div className={styles.change_index_area}>
+      </form>
+      <form onSubmit={(e) => e.preventDefault()} className={styles.change_index_area}>
         <Input disabled={Boolean(loadingbutton)} placeholder={'Введите индекс'} onChange={handleChange} min={0} max={array.length - 1} maxLength={4} isLimitText={true} type={"number"} extraClass={styles.change_index_input} name={'indexInput'} value={values.indexInput}></Input>
         <Button isLoader={loadingbutton === 'addFromIndexButton'} disabled={isIndexSubmitDisabled || Boolean(loadingbutton)} text={'Добавить по индексу'} onClick={handleAddFromIndex} extraClass={styles.add_index_button}></Button>
-        <Button isLoader={loadingbutton === 'deleteFromIndexButton'} disabled={isIndexSubmitDisabled || Boolean(loadingbutton)} text={'Удалить по индексу'} onClick={handleDeleteFromIndex} extraClass={styles.delete_index_button}></Button>
-      </div>
+        <Button isLoader={loadingbutton === 'deleteFromIndexButton'} disabled={isIndexDeleteDisabled || Boolean(loadingbutton)} text={'Удалить по индексу'} onClick={handleDeleteFromIndex} extraClass={styles.delete_index_button}></Button>
+      </form>
       <div className={styles.list_area}>
         {array && array.map((item, index) =>
           <div key={index} className={styles.list_item_area}>

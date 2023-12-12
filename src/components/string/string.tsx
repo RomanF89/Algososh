@@ -104,7 +104,7 @@ export const StringComponent: React.FC = () => {
 
   return (
     <SolutionLayout title="Строка">
-      <form className={styles.string_content}>
+      <form onSubmit={(e) => e.preventDefault()} className={styles.string_content}>
         <div className={styles.input_area}>
           <Input disabled={isLoading} onChange={handleChange} name={'inputString'} extraClass={'input_string'} isLimitText={true} maxLength={11} value={values.inputString}></Input>
         </div>

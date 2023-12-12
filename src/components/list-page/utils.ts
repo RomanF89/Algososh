@@ -1,5 +1,5 @@
 export type TСircleChange = {
-    num: number | null;
+    num: number | string | null;
     index: number | null;
     operation?: string | undefined;
   };

@@ -87,12 +87,12 @@ export const QueuePage: React.FC = () => {
 
   return (
     <SolutionLayout title="Очередь">
-      <div className={styles.input_area}>
+      <form onSubmit={(e) => e.preventDefault()}className={styles.input_area}>
         <Input disabled={Boolean(loadingbutton)} onChange={handleChange} maxLength={4} type={"text"} isLimitText={true} extraClass={styles.queue_input} name={'inputQueue'} value={values.inputQueue}></Input>
         <Button isLoader={loadingbutton === 'enqueueButton'} disabled={ isSubmitDisabled || Boolean(loadingbutton)} onClick={enqueue} text={"Добавить"} extraClass={styles.queue_add_button}></Button>
         <Button isLoader={loadingbutton === 'dequeueButton'} disabled={Boolean(loadingbutton)} onClick={dequeue} text={"Удалить"} extraClass={styles.queue_delete_button}></Button>
         <Button disabled={Boolean(loadingbutton)} onClick={clear} text={"Очистить"} extraClass={styles.queue_clear_button}></Button>
-      </div>
+      </form>
       <div className={styles.queue_area}>
         <div className={styles.queue_items}>
           {queue && queue.map((item, index) =>

@@ -55,12 +55,12 @@ export const FibonacciPage: React.FC = () => {
 
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
-      <div className={styles.fibo_content}>
+      <form onSubmit={(e) => e.preventDefault()} className={styles.fibo_content}>
         <div className={styles.input_area}>
           <Input disabled={isLoading} placeholder={'Введите число'} onChange={handleChange} name={'fiboInput'} min={1} type={"number"} max={19} isLimitText={true} value={values.fiboInput}></Input>
         </div>
         <Button disabled={isSubmitDisabled} isLoader={isLoading} onClick={onClick} text="Рассчитать"></Button>
-      </div>
+      </form>
       <div className={styles.fibo_area}>
         <div className={styles.fibo_items}>
           {array.map((item, index) =>

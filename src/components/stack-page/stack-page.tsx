@@ -68,12 +68,12 @@ export const StackPage: React.FC = () => {
 
   return (
     <SolutionLayout title="Стек">
-      <div className={styles.input_area}>
+      <form onSubmit={(e) => e.preventDefault()} className={styles.input_area}>
         <Input disabled={Boolean(loadingbutton)} onChange={handleChange} maxLength={4} type={"text"} name={"inputStack"} isLimitText={true} extraClass={styles.stack_input} value={values.inputStack}></Input>
         <Button isLoader={loadingbutton === 'pushButton'} disabled={isSubmitDisabled || Boolean(loadingbutton)} onClick={push} text={"Добавить"} extraClass={styles.stack_add_button}></Button>
         <Button isLoader={loadingbutton === 'popButton'} disabled={Boolean(loadingbutton)} onClick={pop} text={"Удалить"} extraClass={styles.stack_delete_button}></Button>
         <Button disabled={Boolean(loadingbutton)} onClick={clear} text={"Очистить"} extraClass={styles.stack_clear_button}></Button>
-      </div>
+      </form>
       <div className={styles.stack_area}>
         <div className={styles.stack_items}>
           {stackArray && stackArray.map((item, index) =>
