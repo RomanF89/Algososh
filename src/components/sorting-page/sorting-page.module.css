@@ -1,0 +1,66 @@
+.buttons_area {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.radio_button {
+    margin: 0 40px 0 0;
+}
+
+.sorting_button {
+    margin: 0 0 0 12px;
+}
+
+.array_button {
+    margin: 0 0 0 80px;
+}
+
+.sorting_items {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    margin: 48px 0 0 0;
+}
+
+.sorting_item {
+    display: flex;
+    height: 350px;
+    flex-direction: column;
+    justify-content: end;
+    margin: 0 8px 0 0;
+}
+
+.item_column {
+    width: 50px; 
+    height: 200px;
+    background-color: rgba(0, 50, 255, 1)
+}
+
+.item_column_red {
+    width: 50px;
+    height: 200px;
+    background-color: #D252E1;
+}
+
+.item_column_red_plus {
+    width: 50px;
+    height: 200px;
+    background-color: #D252E1;
+}
+
+.item_column_green {
+    width: 50px;
+    height: 200px;
+    background-color: #7FE051
+}
+
+.item_value {
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px;
+    text-transform: uppercase;
+}

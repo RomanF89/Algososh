@@ -1,0 +1,66 @@
+.input_area  {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.queue_input {
+    width: 377px;
+    height: 60px;
+    margin: 0 12px 0 0;
+}
+
+.queue_head {
+    margin: 40px 0 0 0;
+}
+
+.queue_tail {
+    margin: 0 0 40px 0;
+}
+
+.queue_add_button {
+    margin: 0 12px 0 0;
+}
+
+.queue_delete_button {
+    margin: 0 80px 0 0;
+}
+
+.queue_area {
+    display: flex;
+    justify-content: center;
+    margin: 78px 0 0 0;
+}
+
+.queue_items {
+    max-width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.queue_item_area {
+    margin-top: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.queue_item {
+    margin-right: 16px;
+}
+
+.queue_item_position {
+    margin: 8px 16px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 80px;
+    height: 22px;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+}
