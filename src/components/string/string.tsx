@@ -111,13 +111,12 @@ export const StringComponent: React.FC = () => {
         <Button disabled={isSubmitDisabled} isLoader={isLoading} onClick={handleClick} text="Развернуть"></Button>
       </form>
       <div className={styles.reverse_area}>
-        <div className={styles.string_items}>
+        <ul className={styles.string_items}>
           {array.map((item, index) =>
-            <p key={index} className={item[1] === 'green' ? styles.string_item_green : item[1] === 'red' ? styles.string_item_red : styles.string_item}>
+            <li key={index} className={item[1] === 'green' ? styles.string_item_green : item[1] === 'red' ? styles.string_item_red : styles.string_item}>
               {item[0]}
-            </p>)}
-
-        </div>
+            </li>)}
+        </ul>
       </div>
     </SolutionLayout>
   );

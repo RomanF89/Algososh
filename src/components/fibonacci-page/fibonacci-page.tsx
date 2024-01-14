@@ -20,7 +20,6 @@ export const FibonacciPage: React.FC = () => {
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const {values, handleChange, setValues}: IForm  = useForm({fiboInput: ''});
 
-
   const onClick = () => {
     if (values.fiboInput === '' || values.fiboInput === '0') {
       return
@@ -62,18 +61,18 @@ export const FibonacciPage: React.FC = () => {
         <Button disabled={isSubmitDisabled} isLoader={isLoading} onClick={onClick} text="Рассчитать"></Button>
       </form>
       <div className={styles.fibo_area}>
-        <div className={styles.fibo_items}>
+        <ul className={styles.fibo_items}>
           {array.map((item, index) =>
-            <div key={index} className={styles.fibo_item_area}>
+            <li key={index} className={styles.fibo_item_area}>
               <div className={styles.fibo_item}>
                 {item}
               </div>
               <p className={styles.fibo_item_position}>
                 {index}
               </p>
-            </div>
+            </li>
           )}
-        </div>
+        </ul>
       </div>
     </SolutionLayout>
   );
