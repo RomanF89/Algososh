@@ -1,9 +1,10 @@
+import { circleClass } from "./constants";
 import { addTestValueButtonClick } from "./utils";
 
 
 describe('Тестирование Стэка', function () {
     beforeEach(() => {
-        cy.visit("http://localhost:3000/stack");
+        cy.visit("stack");
       });
     it('Если в инпуте пусто, то кнопка добавления недоступна', function () {
         cy.get('input').should('be.empty');
@@ -12,7 +13,7 @@ describe('Тестирование Стэка', function () {
     it('Правильность добавления и отрисовки элемента', function () {
         cy.clock();
         addTestValueButtonClick();
-        cy.get('[class*=circle_circle]').as('circle');
+        cy.get(circleClass).as('circle');
         cy.get('@circle').should('have.css', 'border', '4px solid rgb(210, 82, 225)');
         cy.tick(500);
         cy.get('@circle').should('have.css', 'border', '4px solid rgb(0, 50, 255)');
@@ -22,7 +23,7 @@ describe('Тестирование Стэка', function () {
         addTestValueButtonClick();
         cy.tick(500);
         cy.get('button').contains('Удалить').click();
-        cy.get('[class*=circle_circle]').as('circle');
+        cy.get(circleClass).as('circle');
         cy.get('@circle').should('have.css', 'border', '4px solid rgb(210, 82, 225)');
         cy.tick(500);
         cy.get('@circle').should('not.exist');
@@ -35,7 +36,7 @@ describe('Тестирование Стэка', function () {
         cy.tick(500);
         addTestValueButtonClick();
         cy.tick(500);
-        cy.get('[class*=circle_circle]').as('circle');
+        cy.get(circleClass).as('circle');
         cy.get('button').contains('Очистить').click();
         cy.get('@circle').should('not.exist');
     })

@@ -1,8 +1,12 @@
+import { circleClass } from "./constants";
+
 const circleDefaultArray = ['0', '34', '8', '1'];
+
+
 
 describe('Тестирование Списка', function () {
     beforeEach(() => {
-        cy.visit("http://localhost:3000/list");
+        cy.visit("list");
     });
     it('Если в инпуте пусто, то кнопка добавления недоступна', function () {
         cy.get('input').should('be.empty');
@@ -17,7 +21,7 @@ describe('Тестирование Списка', function () {
         })
     })
     it('Добавление элемента в head', function () {
-        cy.get('[class*=circle_circle]').eq(0).as('circleHead');
+        cy.get(circleClass).eq(0).as('circleHead');
         cy.clock();
         cy.get('input').eq(0).type('test');
         cy.get('button').contains('Добавить в head').click();
@@ -26,7 +30,7 @@ describe('Тестирование Списка', function () {
         cy.get('@circleHead').prev().should('have.text', 'head');
     })
     it('Удаление элемента из head', function () {
-        cy.get('[class*=circle_circle]').eq(0).as('circleHead');
+        cy.get(circleClass).eq(0).as('circleHead');
         cy.clock();
         cy.get('button').contains('Удалить из head').click();
         cy.tick(2000);
@@ -38,7 +42,7 @@ describe('Тестирование Списка', function () {
         cy.get('input').eq(0).type('test');
         cy.get('button').contains('Добавить в tail').click();
         cy.tick(2000);
-        cy.get('[class*=circle_circle]').each((circle, index, list) => {
+        cy.get(circleClass).each((circle, index, list) => {
             const length = list.length
             cy.wrap(list[length - 1]).contains('test');
             cy.wrap(list[length - 1]).next().next().should('have.text', 'tail');
@@ -48,7 +52,7 @@ describe('Тестирование Списка', function () {
         cy.clock();
         cy.get('button').contains('Удалить из tail').click();
         cy.tick(2000);
-        cy.get('[class*=circle_circle]').each((circle, index, list) => {
+        cy.get(circleClass).each((circle, index, list) => {
             const length = list.length
             cy.wrap(list[length - 1]).contains('8');
             cy.wrap(list[length - 1]).next().next().should('have.text', 'tail');
@@ -60,14 +64,14 @@ describe('Тестирование Списка', function () {
         cy.get('input').eq(1).type('2');
         cy.get('button').contains('Добавить по индексу').click();
         cy.tick(4000);
-        cy.get('[class*=circle_circle]').eq(2).contains('test');
+        cy.get(circleClass).eq(2).contains('test');
     })
     it('Удаление элемента по индексу', function () {
         cy.clock();
         cy.get('input').eq(1).type('2');
         cy.get('button').contains('Удалить по индексу').click();
         cy.tick(4000);
-        cy.get('[class*=circle_circle]').eq(2).contains('1');
+        cy.get(circleClass).eq(2).contains('1');
     })
 
 })

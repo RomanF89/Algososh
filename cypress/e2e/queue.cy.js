@@ -1,8 +1,9 @@
+import { circleClass } from "./constants";
 import { addTestValueButtonClick } from "./utils";
 
 describe('Тестирование Очереди', function () {
     beforeEach(() => {
-        cy.visit("http://localhost:3000/queue");
+        cy.visit("queue");
     });
     it('Если в инпуте пусто, то кнопка добавления недоступна', function () {
         cy.get('input').should('be.empty');
@@ -12,7 +13,7 @@ describe('Тестирование Очереди', function () {
         cy.clock();
         //Добавление элемента
         addTestValueButtonClick();
-        cy.get('[class*=circle_circle]').eq(0).as('circle');
+        cy.get(circleClass).eq(0).as('circle');
         //Правильность отрисовки
         cy.get('@circle').should('have.css', 'border', '4px solid rgb(210, 82, 225)');
         cy.tick(500);
@@ -37,8 +38,8 @@ describe('Тестирование Очереди', function () {
         addTestValueButtonClick();
         cy.tick(500);
         cy.get('button').contains('Очистить').click();
-        cy.get('[class*=circle_circle]').should('not.have.text', 'test');
-        cy.get('[class*=circle_circle]').prev().should('not.have.text', 'head');
-        cy.get('[class*=circle_circle]').nextAll().should('not.have.text', 'tail');
+        cy.get(circleClass).should('not.have.text', 'test');
+        cy.get(circleClass).prev().should('not.have.text', 'head');
+        cy.get(circleClass).nextAll().should('not.have.text', 'tail');
     })
 })

@@ -3,7 +3,7 @@ const fibonacciArray = ['0', '1', '1', '2', '3', '5', '8', '13', '21', '34', '55
 
 describe('Тестирование последовательности Фибоначчи', function () {
     beforeEach(() => {
-        cy.visit('http://localhost:3000/fibonacci');
+        cy.visit('fibonacci');
       });
     it('Если в инпуте пусто, то кнопка добавления недоступна.', function () {
         cy.get('input').should('be.empty');

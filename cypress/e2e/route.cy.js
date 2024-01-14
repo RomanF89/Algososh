@@ -1,6 +1,6 @@
 describe('Корректный переход по страницам', function() {
     beforeEach(() => {
-        cy.visit('http://localhost:3000');
+        cy.visit('');
     });
     it('Должна открыться страница Строка', function() {
         cy.get('a[href*="recursion"]').click();

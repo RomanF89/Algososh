@@ -3,7 +3,7 @@ const reverseArrOnChange = ['4', '2', '3', '1'];
 
 describe('Компонент строка', function() {
     beforeEach(() => {
-        cy.visit('http://localhost:3000/recursion');
+        cy.visit('recursion');
     });
     it('Если в инпуте пусто, то кнопка добавления недоступна', function() {
       cy.get('input').should('be.empty');
