@@ -206,9 +206,9 @@ export const ListPage: React.FC = () => {
         <Button isLoader={loadingbutton === 'addFromIndexButton'} disabled={isIndexSubmitDisabled || Boolean(loadingbutton)} text={'Добавить по индексу'} onClick={handleAddFromIndex} extraClass={styles.add_index_button}></Button>
         <Button isLoader={loadingbutton === 'deleteFromIndexButton'} disabled={isIndexDeleteDisabled || Boolean(loadingbutton)} text={'Удалить по индексу'} onClick={handleDeleteFromIndex} extraClass={styles.delete_index_button}></Button>
       </form>
-      <div className={styles.list_area}>
+      <ul className={styles.list_area}>
         {array && array.map((item, index) =>
-          <div key={index} className={styles.list_item_area}>
+          <li key={index} className={styles.list_item_area}>
             {circleToChange && index === circleToChange.index && circleToChange.operation === 'add' && <Circle state={ElementStates.Changing} extraClass={styles.item_small_top} isSmall={true} letter={circleToChange.num?.toString()} />}
             <div className={styles.list_item}>
               <Circle
@@ -221,9 +221,10 @@ export const ListPage: React.FC = () => {
               {index === array.length - 1 ? '' : <ArrowIcon />}
             </div>
             {circleToChange && index === circleToChange.index && circleToChange.operation === 'delete' && <Circle state={ElementStates.Changing} extraClass={styles.item_small_bottom} isSmall={true} letter={circleToChange.num?.toString()} />}
-          </div>
+          </li>
         )}
-      </div>
+      </ul>
     </SolutionLayout>
   );
 };
+

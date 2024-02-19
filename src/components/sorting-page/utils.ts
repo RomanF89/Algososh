@@ -28,6 +28,12 @@ export const bubbleSort = (arr: number[]) => {
   const arrays = [];
   const reverseArray = [];
   let newArr = [...arr];
+  if (newArr.length === 1) {
+    return {
+      bubbleArray: [newArr],
+      reverseBubbleArray: [newArr],
+    }
+  }
   for (let j = newArr.length - 1; j > 0; j--) {
     for (let i = 0; i < j; i++) {
       if (newArr[i] > newArr[i + 1]) {
